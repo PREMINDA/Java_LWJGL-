@@ -35,6 +35,12 @@ public class Window {
             throw new RuntimeException(e);
         }
         loop();
+
+        glfwFreeCallbacks(glfwWindow);
+        glfwDestroyWindow(glfwWindow);
+
+        glfwTerminate();
+        glfwSetErrorCallback(null).free();
     }
 
     public void inti() throws IllegalAccessException {
