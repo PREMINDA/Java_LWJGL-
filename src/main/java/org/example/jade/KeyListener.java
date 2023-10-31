@@ -12,11 +12,11 @@ public class KeyListener {
     }
 
     public static KeyListener get() {
-        if (KeyListener.instance == null) {
-            KeyListener.instance = new KeyListener();
+        if (instance == null) {
+            instance = new KeyListener();
         }
 
-        return KeyListener.instance;
+        return instance;
     }
 
     public static void keyCallback(long window, int key, int scancode, int action, int mods) {
