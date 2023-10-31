@@ -1,5 +1,6 @@
 package org.example.jade;
 
+import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
@@ -64,7 +65,10 @@ public class Window {
              throw new IllegalStateException("Failed to create the window");
          }
 
-         //Make the OpenGL context
+         glfwSetCursorPosCallback(glfwWindow, MouseListener::mousePosCallBack);
+         glfwSetMouseButtonCallback(glfwWindow,MouseListener::mouseButtonCallback);
+         glfwSetScrollCallback(glfwWindow,MouseListener::mouseScrollCallback);
+        //Make the OpenGL context
          glfwMakeContextCurrent(glfwWindow);
 
          //Enable v-sync
