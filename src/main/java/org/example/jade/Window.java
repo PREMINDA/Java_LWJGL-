@@ -1,7 +1,16 @@
 package org.example.jade;
 
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.opengl.GL;
+
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
 public class Window {
     private int height,width;
+    private long glfwWindow;
     private String title;
 
     private static Window window = null;
@@ -18,7 +27,57 @@ public class Window {
         return window;
     }
 
-    public void run(){
-        System.out.println("Run LWJGL");
+    public void run() {
+
+        try {
+            inti();
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        loop();
+    }
+
+    public void inti() throws IllegalAccessException {
+        //setup an error callback
+        GLFWErrorCallback.createPrint(System.err).set();
+
+        //init GLFW
+        if(!glfwInit()){
+            throw new IllegalAccessException("Unable to init GLFW");
+        }
+
+        //Config GLFW
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE );
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE );
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE );
+
+        //Create the window
+         glfwWindow = glfwCreateWindow(this.width,this.height,this.title,NULL,NULL);
+
+         if(glfwWindow == NULL){
+             throw new IllegalStateException("Failed to create the window");
+         }
+
+         //Make the OpenGL context
+         glfwMakeContextCurrent(glfwWindow);
+
+         //Enable v-sync
+        glfwSwapInterval(1);
+
+        //make The window visible
+        glfwShowWindow(glfwWindow);
+
+        GL.createCapabilities();
+    }
+    public void loop(){
+        while (!glfwWindowShouldClose(glfwWindow)){
+            //Poll events
+            glfwPollEvents();
+
+            glClearColor(1.0f,0.0f,0.0f,1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            glfwSwapBuffers(glfwWindow);
+        }
     }
 }
